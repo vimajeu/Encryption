@@ -11,4 +11,6 @@ add_executable(Encryption
         Cipher.h
         VigenereCipher.cpp
         VigenereCipher.h
+        cipher_api.h
+        cipher_api.cpp
 )
