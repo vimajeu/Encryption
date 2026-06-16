@@ -2,7 +2,7 @@
 // Created by ліна on 16.06.2026.
 //
 
-#include "../VigenereCipher.h"
+#include "VigenereCipher.h"
 #include <string>
 
 VigenereCipher::VigenereCipher(const std::string &key) {
@@ -13,51 +13,51 @@ VigenereCipher::VigenereCipher(const std::string &key) {
             key_ += tolower(current_char);
         }
     }
+    if (key_.empty()) {
+        throw std::invalid_argument("Vigenère key must contain at least one letter");
+    }
 }
 
 std::string VigenereCipher::encrypt(const std::string &text) {
-    int text_length = text.size();
     int key_length = key_.size();
-    int symb_counter = 0;
+    int alpha_counter = 0;
     std::string new_string = "";
-    for (int i = 0; i < text_length; i++) {
-        char current_char = text[i];
+    for (char current_char : text) {
         if (isalpha(current_char)) {
-            int current_key = key_[(i - symb_counter) % key_length] - 'a';
+            int current_key = key_[alpha_counter % key_length] - 'a';
             if (isupper(current_char)) {
                 new_string += (current_char - 'A' + current_key) % 26 + 'A';
             }
             else {
                 new_string += (current_char - 'a' + current_key) % 26 + 'a';
             }
+            alpha_counter++;
         }
         else {
             new_string += current_char;
-            symb_counter++;
         }
     }
     return new_string;
 }
 
 std::string VigenereCipher::decrypt(const std::string &text) {
-    int text_length = text.size();
     int key_length = key_.size();
-    int symb_counter = 0;
+    int alpha_counter = 0;
     std::string new_string = "";
-    for (int i = 0; i < text_length; i++) {
-        char current_char = text[i];
+    for (char current_char : text) {
         if (isalpha(current_char)) {
-            int current_key = key_[(i - symb_counter) % key_length] - 'a';
+            int current_key = key_[alpha_counter % key_length] - 'a';
+            int rev_shift = (26 - current_key) % 26;
             if (isupper(current_char)) {
-                new_string += (current_char - 'A' + (26 - current_key) % 26) % 26 + 'A';
+                new_string += (current_char - 'A' + rev_shift) % 26 + 'A';
             }
             else {
-                new_string += (current_char - 'a' + (26 - current_key) % 26) % 26 + 'a';
+                new_string += (current_char - 'a' + rev_shift) % 26 + 'a';
             }
+            alpha_counter++;
         }
         else {
             new_string += current_char;
-            symb_counter++;
         }
     }
     return new_string;

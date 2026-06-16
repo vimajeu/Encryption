@@ -29,82 +29,102 @@ int main() {
     auto destroy_cipher = (destroy_funct)dlsym(handle, "cipher_destroy");
     auto free_cipher = (free_funct)dlsym(handle, "cipher_free");
 
-    int command;
-    std::cout << "1. Create Caesar cipher\n";
-    std::cout << "2. Create Vigenere cipher\n";
-    std::cout << "Choose a command: \n";
-    std::cin >> command;
+    if (!caesar || !vigenere || !encrypt || !decrypt || !destroy_cipher || !free_cipher) {
+        std::cerr << "Failed to load symbols: " << dlerror() << "\n";
+        dlclose(handle);
+        return 1;
+    }
 
-    switch (command) {
-        case 1: {
-            int command_c;
-            int key_c;
-            std::string text_encr_c;
-            std::string text_decr_c;
+    while (1) {
+        int command;
+        std::cout << "1. Create Caesar cipher\n";
+        std::cout << "2. Create Vigenere cipher\n";
+        std::cout << "Choose a command: \n";
+        std::cin >> command;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-            std::cout << "Enter the key: \n";
-            std::cin >> key_c;
-            cipher_t *cipher_c = caesar(key_c);
+        switch (command) {
+            case 1: {
+                int command_c;
+                int key_c;
+                std::string text_encr_c;
+                std::string text_decr_c;
 
-            std::cout << "1. Encrypt\n";
-            std::cout << "2. Decrypt\n";
-            std::cout << "Choose a command: \n";
-            std::cin >> command_c;
-            switch (command_c) {
-                case 1: {
-                    std::cout << "Enter text: \n";
-                    std::cin >> text_encr_c;
-                    char* encr = encrypt(cipher_c, text_encr_c.c_str());
-                    std::cout << encr;
-                    free_cipher(encr);
-                    break;
+                std::cout << "Enter the key: \n";
+                std::cin >> key_c;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                cipher_t *cipher_c = caesar(key_c);
+
+                std::cout << "1. Encrypt\n";
+                std::cout << "2. Decrypt\n";
+                std::cout << "Choose a command: \n";
+                std::cin >> command_c;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                switch (command_c) {
+                    case 1: {
+                        std::cout << "Enter text: \n";
+                        std::getline(std::cin, text_encr_c);
+                        char* encr = encrypt(cipher_c, text_encr_c.c_str());
+                        std::cout << encr << "\n";
+                        free_cipher(encr);
+                        break;
+                    }
+                    case 2: {
+                        std::cout << "Enter text: \n";
+                        std::getline(std::cin, text_decr_c);
+                        char* decr = decrypt(cipher_c, text_decr_c.c_str());
+                        std::cout << decr << "\n";
+                        free_cipher(decr);
+                        break;
+                    }
+                    default:
+                        std::cout << "No such command.\n";
                 }
-                case 2: {
-                    std::cout << "Enter text: \n";
-                    std::cin >> text_decr_c;
-                    char* decr = decrypt(cipher_c, text_decr_c.c_str());
-                    std::cout << decr;
-                    free_cipher(decr);
-                    break;
-                }
+                destroy_cipher(cipher_c);
+                break;
             }
-            destroy_cipher(cipher_c);
-            break;
-        }
-        case 2: {
-            int command_v;
-            std::string key_v;
-            std::string text_encr_v;
-            std::string text_decr_v;
+            case 2: {
+                int command_v;
+                std::string key_v;
+                std::string text_encr_v;
+                std::string text_decr_v;
 
-            std::cout << "Enter the key: \n";
-            std::cin >> key_v;
-            cipher_t *cipher_v = vigenere(key_v.c_str());
+                std::cout << "Enter the key: \n";
+                std::getline(std::cin, key_v);
+                cipher_t *cipher_v = vigenere(key_v.c_str());
 
-            std::cout << "1. Encrypt\n";
-            std::cout << "2. Decrypt\n";
-            std::cout << "Choose a command: \n";
-            std::cin >> command_v;
-            switch (command_v) {
-                case 1: {
-                    std::cout << "Enter text: \n";
-                    std::cin >> text_encr_v;
-                    char* encr = encrypt(cipher_v, text_encr_v.c_str());
-                    std::cout << encr;
-                    free_cipher(encr);
-                    break;
+                std::cout << "1. Encrypt\n";
+                std::cout << "2. Decrypt\n";
+                std::cout << "Choose a command: \n";
+                std::cin >> command_v;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                switch (command_v) {
+                    case 1: {
+                        std::cout << "Enter text: \n";
+                        std::getline(std::cin, text_encr_v);
+                        char* encr = encrypt(cipher_v, text_encr_v.c_str());
+                        std::cout << encr << "\n";
+                        free_cipher(encr);
+                        break;
+                    }
+                    case 2: {
+                        std::cout << "Enter text: \n";
+                        std::getline(std::cin, text_decr_v);
+                        char* decr = decrypt(cipher_v, text_decr_v.c_str());
+                        std::cout << decr << "\n";
+                        free_cipher(decr);
+                        break;
+                    }
+                    default:
+                        std::cout << "No such command.\n";
                 }
-                case 2: {
-                    std::cout << "Enter text: \n";
-                    std::cin >> text_decr_v;
-                    char* decr = decrypt(cipher_v, text_decr_v.c_str());
-                    std::cout << decr;
-                    free_cipher(decr);
-                    break;
-                }
+                destroy_cipher(cipher_v);
+                break;
             }
-            destroy_cipher(cipher_v);
-            break;
+
+            default:
+                std::cout << "No such command.\n";
         }
+        dlclose(handle);
     }
 }
