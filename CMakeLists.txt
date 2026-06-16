@@ -10,4 +10,5 @@ add_executable(Encryption
         CaesarCipher.h
         Cipher.h
         VigenereCipher.cpp
-        VigenereCipher.h)
+        VigenereCipher.h
+)

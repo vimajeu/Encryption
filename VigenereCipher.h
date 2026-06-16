@@ -5,6 +5,7 @@
 #ifndef ENCRYPTION_VIGENERECIPHER_H
 #define ENCRYPTION_VIGENERECIPHER_H
 #include "Cipher.h"
+#include <string>
 
 
 class VigenereCipher : public Cipher {
