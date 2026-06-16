@@ -1,16 +1,5 @@
 cmake_minimum_required(VERSION 4.2)
 project(Encryption)
 
-set(CMAKE_CXX_STANDARD 14)
-
-include_directories(.)
-
-add_executable(Encryption
-        CaesarCipher.cpp
-        CaesarCipher.h
-        Cipher.h
-        VigenereCipher.cpp
-        VigenereCipher.h
-        cipher_api.h
-        cipher_api.cpp
-)
+add_subdirectory(cipher_library)
+add_subdirectory(cipher_cli)

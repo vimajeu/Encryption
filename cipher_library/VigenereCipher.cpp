@@ -2,7 +2,7 @@
 // Created by ліна on 16.06.2026.
 //
 
-#include "VigenereCipher.h"
+#include "../VigenereCipher.h"
 #include <string>
 
 VigenereCipher::VigenereCipher(const std::string &key) {

@@ -2,10 +2,10 @@
 // Created by ліна on 16.06.2026.
 //
 
-#include "cipher_api.h"
+#include "../cipher_api.h"
 #include "Cipher.h"
 #include "CaesarCipher.h"
-#include "VigenereCipher.h"
+#include "../VigenereCipher.h"
 #include <cstring>
 
 cipher_t* cipher_create_caesar (int key) {
