@@ -125,6 +125,6 @@ int main() {
             default:
                 std::cout << "No such command.\n";
         }
-        dlclose(handle);
     }
+    dlclose(handle);
 }
