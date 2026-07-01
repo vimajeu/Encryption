@@ -3,48 +3,23 @@
 //
 
 #include "CaesarCipher.h"
-#include <string>
 
 CaesarCipher::CaesarCipher(int key) {
-    key_ = (key % 26 + 26) % 26;
+    key_ = (key % 256 + 256) % 256;
 }
 
-std::string CaesarCipher::encrypt(const std::string& text) {
-    int length = text.size();
-    std::string new_string = "";
-    for (int i = 0; i < length; i++) {
-        char current_char = text[i];
-        if (isalpha(current_char)) {
-            if (isupper(current_char)) {
-                new_string += (current_char - 'A' + key_) % 26 + 'A';
-            }
-            else {
-                new_string += (current_char - 'a' + key_) % 26 + 'a';
-            }
-        }
-        else {
-            new_string += current_char;
-        }
+std::vector<uint8_t> CaesarCipher::encrypt(const std::vector<uint8_t>& data) {
+    std::vector<uint8_t> result;
+    for (uint8_t byte : data) {
+        result.push_back(static_cast<uint8_t>((byte + key_) % 256));
     }
-    return new_string;
+    return result;
 }
 
-std::string CaesarCipher::decrypt(const std::string &text) {
-    int length = text.size();
-    std::string new_string = "";
-    for (int i = 0; i < length; i++) {
-        char current_char = text[i];
-        if (isalpha(current_char)) {
-            if (isupper(current_char)) {
-                new_string += (current_char - 'A' + (26 - key_) % 26) % 26 + 'A';
-            }
-            else {
-                new_string += (current_char - 'a' + (26 - key_) % 26) % 26 + 'a';
-            }
-        }
-        else {
-            new_string += current_char;
-        }
+std::vector<uint8_t> CaesarCipher::decrypt(const std::vector<uint8_t>& data) {
+    std::vector<uint8_t> result;
+    for (uint8_t byte : data) {
+        result.push_back(static_cast<uint8_t>((byte - key_ + 256) % 256));
     }
-    return new_string;
+    return result;
 }

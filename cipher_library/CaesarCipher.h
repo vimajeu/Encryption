@@ -12,8 +12,8 @@ class CaesarCipher : public Cipher {
     int key_;
 public:
     CaesarCipher(int key);
-    std::string encrypt(const std::string& text) override;
-    std::string decrypt(const std::string& text) override;
+    std::vector<uint8_t> encrypt(const std::vector<uint8_t>& data) override;
+    std::vector<uint8_t> decrypt(const std::vector<uint8_t>& data) override;
 };
 
 

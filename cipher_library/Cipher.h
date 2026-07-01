@@ -6,12 +6,13 @@
 #define ENCRYPTION_CIPHER_H
 
 #include <string>
+#include <vector>
 
 
 class Cipher {
 public:
-    virtual std::string encrypt(const std::string& text) = 0;
-    virtual std::string decrypt(const std::string& text) = 0;
+    virtual std::vector<uint8_t> encrypt(const std::vector<uint8_t>& data) = 0;
+    virtual std::vector<uint8_t> decrypt(const std::vector<uint8_t>& data) = 0;
 
     virtual ~Cipher() = default;
 };
