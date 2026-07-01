@@ -5,7 +5,6 @@
 #ifndef ENCRYPTION_CIPHER_H
 #define ENCRYPTION_CIPHER_H
 
-#include <string>
 #include <vector>
 
 
