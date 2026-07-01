@@ -8,6 +8,7 @@
 #include "VigenereCipher.h"
 #include <cstring>
 
+extern "C" {
 cipher_t* cipher_create_caesar (int key) {
     CaesarCipher* ciph = new CaesarCipher(key);
     cipher_t* handle = new cipher_t;
@@ -22,20 +23,26 @@ cipher_t* cipher_create_vigenere(const char* key) {
     return handle;
 }
 
-char* cipher_encrypt(cipher_t* cipher, const char* text) {
-    Cipher* ciph = static_cast<Cipher *>(*cipher);
-    std::string str_result = ciph->encrypt(std::string(text));
-    char* result = new char[str_result.length() + 1];
-    std::strcpy(result, str_result.c_str());
-    return result;
+uint8_t* cipher_encrypt(cipher_t* cipher, const uint8_t* data, size_t length, size_t* out_length) {
+    Cipher* ciph = static_cast<Cipher*>(*cipher);
+    std::vector<uint8_t> input(data, data + length);
+    std::vector<uint8_t> result = ciph->encrypt(input);
+
+    *out_length = result.size();
+    uint8_t* out = new uint8_t[result.size()];
+    std::memcpy(out, result.data(), result.size());
+    return out;
 }
 
-char* cipher_decrypt(cipher_t* cipher, const char* text) {
-    Cipher* ciph = static_cast<Cipher *>(*cipher);
-    std::string str_result = ciph->decrypt(std::string(text));
-    char* result = new char[str_result.length() + 1];
-    std::strcpy(result, str_result.c_str());
-    return result;
+uint8_t* cipher_decrypt(cipher_t* cipher, const uint8_t* data, size_t length, size_t* out_length) {
+    Cipher* ciph = static_cast<Cipher*>(*cipher);
+    std::vector<uint8_t> input(data, data + length);
+    std::vector<uint8_t> result = ciph->decrypt(input);
+
+    *out_length = result.size();
+    uint8_t* out = new uint8_t[result.size()];
+    std::memcpy(out, result.data(), result.size());
+    return out;
 }
 
 void cipher_destroy(cipher_t* cipher) {
@@ -44,6 +51,7 @@ void cipher_destroy(cipher_t* cipher) {
     delete cipher;
 }
 
-void cipher_free (char* str) {
-    delete[] str;
+void cipher_free (uint8_t* data) {
+    delete[] data;
+}
 }
